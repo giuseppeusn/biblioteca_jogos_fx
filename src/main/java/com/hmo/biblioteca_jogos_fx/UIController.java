@@ -1,6 +1,8 @@
 package com.hmo.biblioteca_jogos_fx;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
@@ -26,7 +28,6 @@ public class UIController {
 
     @FXML
     public void initialize() {
-        
         carregarJogosExemplo();
         exibirJogos();
     }
@@ -49,28 +50,62 @@ public class UIController {
         }
     }
 
+    private void removerJogo(Jogo jogo) {
+        Alert confirmacao = new Alert(AlertType.CONFIRMATION);
+        confirmacao.setTitle("Remover Jogo");
+        confirmacao.setHeaderText("Deseja realmente remover \"" + jogo.getTitulo() + "\"?");
+        confirmacao.setContentText("Essa ação não pode ser desfeita.");
+
+        confirmacao.showAndWait().ifPresent(response -> {
+            if (response.getText().equals("OK")) {
+                bibliotecaJogos.remover(jogo.getTitulo());
+                exibirJogos();
+
+                Alert alerta = new Alert(AlertType.INFORMATION);
+                alerta.setTitle("Jogo Removido");
+                alerta.setHeaderText(null);
+                alerta.setContentText("O jogo \"" + jogo.getTitulo() + "\" foi removido com sucesso!");
+                alerta.showAndWait();
+            }
+        });
+    }
+
+
     private VBox criarCardJogo(Jogo jogo) {
         ImageView capa = new ImageView(new Image(jogo.getCapa(), 267, 400, false, false));
         Label titulo = new Label(jogo.getTitulo());
         titulo.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
         Label ano = new Label(String.valueOf(jogo.getAnoLancamento()));
 
-        VBox card = new VBox(5, capa, titulo, ano);
-        card.setStyle("-fx-padding: 10; -fx-alignment: center; -fx-border-color: #ccc; -fx-border-radius: 5;");
+        Button btnRemover = new Button("Remover");
+        btnRemover.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold;");
+        btnRemover.setOnAction(e -> removerJogo(jogo));
+
+        VBox card = new VBox(5, capa, titulo, ano, btnRemover);
+        card.setStyle("""
+            -fx-padding: 10;
+            -fx-alignment: center;
+            -fx-border-color: #ccc;
+            -fx-border-radius: 5;
+            -fx-background-color: #f9f9f9;
+            -fx-background-radius: 5;
+        """);
+
         return card;
     }
+
 
     @FXML
     private void abrirTelaCadastro() throws IOException {
         Stage stage = (Stage) btnAdicionar.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getResource("views/CadastroView.fxml"));
-        stage.setScene(new Scene(root));
+        stage.setScene(new Scene(root,  900, 700));
     }
 
     @FXML
     public void abrirTelaPrincipal() throws IOException {
         Stage stage = (Stage) btnAdicionar.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("views/MainView.fxml"));
-        stage.setScene(new Scene(root));
+        Parent root = FXMLLoader.load(getClass().getResource("views/UIView.fxml"));
+        stage.setScene(new Scene(root,  900, 700));
     }
 }

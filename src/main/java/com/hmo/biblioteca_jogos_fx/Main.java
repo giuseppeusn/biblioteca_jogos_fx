@@ -8,9 +8,9 @@ import javafx.stage.Stage;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/MainView.fxml"));
-        Scene scene = new Scene(loader.load());
-        primaryStage.setTitle("Biblioteca de Jogos");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("views/UIView.fxml"));
+        Scene scene = new Scene(loader.load(),  900, 700);
+        primaryStage.setTitle("Biblioteca de jogos");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

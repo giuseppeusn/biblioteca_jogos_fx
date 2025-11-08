@@ -86,7 +86,6 @@ public class BibliotecaJogos {
             novaTabela.add(new ArrayList<>());
         }
 
-        // Reinsere todos os jogos na nova tabela
         for (List<Jogo> lista : tabela) {
             for (Jogo j : lista) {
                 int novoIndice = Math.abs(j.getTitulo().hashCode()) % novaCapacidade;

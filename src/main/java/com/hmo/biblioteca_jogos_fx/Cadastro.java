@@ -71,8 +71,8 @@ public class Cadastro {
     @FXML
     private void voltarTelaPrincipal() throws IOException {
         Stage stage = (Stage) campoTitulo.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("views/MainView.fxml"));
-        stage.setScene(new Scene(root));
+        Parent root = FXMLLoader.load(getClass().getResource("views/UIView.fxml"));
+        stage.setScene(new Scene(root, 900, 700));
     }
 }
 

@@ -8,13 +8,13 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.hmo.biblioteca_jogos_fx.UIController">
     <top>
         <VBox spacing="10" alignment="CENTER">
-            <Label text="Biblioteca de Jogos" style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
+            <Label text="Biblioteca de jogos" style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
             
             <HBox alignment="CENTER" spacing="10">
-                <Button text="Ordenar por Título" fx:id="btnOrdenarTitulo"/>
-                <Button text="Ordenar por Gênero" fx:id="btnOrdenarGenero"/>
-                <Button text="Ordenar por Ano" fx:id="btnOrdenarAno"/>
-                <Button text="Adicionar Jogo" fx:id="btnAdicionar" onAction="#abrirTelaCadastro"/>
+                <Button text="Ordenar por título" fx:id="btnOrdenarTitulo"/>
+                <Button text="Ordenar por gênero" fx:id="btnOrdenarGenero"/>
+                <Button text="Ordenar por ano" fx:id="btnOrdenarAno"/>
+                <Button text="Adicionar jogo" fx:id="btnAdicionar" onAction="#abrirTelaCadastro"/>
             </HBox>
         </VBox>
     </top>
