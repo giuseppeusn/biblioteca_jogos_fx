@@ -167,5 +167,10 @@ public class UIController {
     }
 
     @FXML
-    private void ordenarPorAno() {}
+    private void ordenarPorAno() {
+        listaExibicao = coletarJogos();
+        QuickSort quickSort = new QuickSort();
+        quickSort.ordenarPorAnoLancamento(listaExibicao);
+        exibirJogos();
+    }
 }
