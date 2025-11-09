@@ -154,6 +154,7 @@ public class UIController {
 
     @FXML
     private void ordenarPorTitulo() {
+        campoBusca.clear();
         listaExibicao = coletarJogos();
         BubbleSort.ordenarPorTitulo(listaExibicao);
         exibirJogos();
@@ -161,11 +162,18 @@ public class UIController {
 
     @FXML
     private void ordenarPorGenero() {
+        campoBusca.clear();
         listaExibicao = coletarJogos();
         InsertionSort.ordenarPorGenero(listaExibicao);
         exibirJogos();
     }
 
     @FXML
-    private void ordenarPorAno() {}
+    private void ordenarPorAno() {
+        campoBusca.clear();
+        listaExibicao = coletarJogos();
+        QuickSort quickSort = new QuickSort();
+        quickSort.ordenarPorAnoLancamento(listaExibicao);
+        exibirJogos();
+    }
 }
