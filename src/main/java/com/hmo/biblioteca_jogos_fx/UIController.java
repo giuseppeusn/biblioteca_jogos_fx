@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
@@ -25,6 +26,7 @@ public class UIController {
     @FXML private Button btnOrdenarGenero;
     @FXML private Button btnOrdenarAno;
     @FXML private Button btnAdicionar;
+    @FXML private TextField campoBusca;
 
     private static BibliotecaJogos bibliotecaJogos = BibliotecaJogos.getInstancia();
 
@@ -36,6 +38,14 @@ public class UIController {
         carregarJogosExemplo();
         listaExibicao = coletarJogos(); 
         exibirJogos();
+
+        campoBusca.textProperty().addListener((obs, antigo, novoValor) -> {
+            if (novoValor == null || novoValor.trim().isEmpty()) {
+                exibirJogos();
+            } else {
+                exibirBusca(novoValor.trim());
+            }
+        });
     }
 
     private void carregarJogosExemplo() {
@@ -45,7 +55,6 @@ public class UIController {
         bibliotecaJogos.inserir(new Jogo("Resident Evil 4", getClass().getResource("/img/resident-evil-4.jpg").toExternalForm(), "Ação", 2005));
     }
 
-    // pega os jogos da tabela hash
     private List<Jogo> coletarJogos() {
         List<Jogo> lista = new ArrayList<>();
         for (var l : bibliotecaJogos.getTabela()) {
@@ -54,12 +63,26 @@ public class UIController {
         return lista;
     }
 
-    // exibe a lista ordenada
     private void exibirJogos() {
         flowJogos.getChildren().clear();
 
         for (Jogo j : listaExibicao) {
             VBox card = criarCardJogo(j);
+            flowJogos.getChildren().add(card);
+        }
+    }
+
+    private void exibirBusca(String termo) {
+        flowJogos.getChildren().clear();
+
+        Jogo resultados = bibliotecaJogos.buscar(termo);
+
+        if (resultados == null) {
+            Label vazio = new Label("Nenhum jogo encontrado.");
+            vazio.setStyle("-fx-font-size: 16px; -fx-text-fill: gray;");
+            flowJogos.getChildren().add(vazio);
+        } else {
+            VBox card = criarCardJogo(resultados);
             flowJogos.getChildren().add(card);
         }
     }
@@ -108,7 +131,19 @@ public class UIController {
         return card;
     }
 
-    
+    @FXML
+    private void abrirTelaCadastro() throws IOException {
+        Stage stage = (Stage) btnAdicionar.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource("views/CadastroView.fxml"));
+        stage.setScene(new Scene(root, 900, 700));
+    }
+
+    @FXML
+    public void abrirTelaPrincipal() throws IOException {
+        Stage stage = (Stage) btnAdicionar.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource("views/UIView.fxml"));
+        stage.setScene(new Scene(root, 900, 700));
+    }
 
     @FXML
     private void ordenarPorTitulo() {
@@ -124,18 +159,6 @@ public class UIController {
         exibirJogos();
     }
 
-    // NÃO ALTERADO
     @FXML
-    private void abrirTelaCadastro() throws IOException {
-        Stage stage = (Stage) btnAdicionar.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("views/CadastroView.fxml"));
-        stage.setScene(new Scene(root, 900, 700));
-    }
-
-    @FXML
-    public void abrirTelaPrincipal() throws IOException {
-        Stage stage = (Stage) btnAdicionar.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("views/UIView.fxml"));
-        stage.setScene(new Scene(root, 900, 700));
-    }
+    private void ordenarPorAno() {}
 }
