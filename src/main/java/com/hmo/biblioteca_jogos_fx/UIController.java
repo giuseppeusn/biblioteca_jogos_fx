@@ -15,6 +15,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UIController {
 
@@ -26,9 +28,13 @@ public class UIController {
 
     private static BibliotecaJogos bibliotecaJogos = BibliotecaJogos.getInstancia();
 
+    
+    private List<Jogo> listaExibicao = new ArrayList<>();
+
     @FXML
     public void initialize() {
         carregarJogosExemplo();
+        listaExibicao = coletarJogos(); 
         exibirJogos();
     }
 
@@ -39,14 +45,22 @@ public class UIController {
         bibliotecaJogos.inserir(new Jogo("Resident Evil 4", getClass().getResource("/img/resident-evil-4.jpg").toExternalForm(), "Ação", 2005));
     }
 
+    // pega os jogos da tabela hash
+    private List<Jogo> coletarJogos() {
+        List<Jogo> lista = new ArrayList<>();
+        for (var l : bibliotecaJogos.getTabela()) {
+            lista.addAll(l);
+        }
+        return lista;
+    }
+
+    // exibe a lista ordenada
     private void exibirJogos() {
         flowJogos.getChildren().clear();
 
-        for (var lista : bibliotecaJogos.getTabela()) {
-            for (Jogo j : lista) {
-                VBox card = criarCardJogo(j);
-                flowJogos.getChildren().add(card);
-            }
+        for (Jogo j : listaExibicao) {
+            VBox card = criarCardJogo(j);
+            flowJogos.getChildren().add(card);
         }
     }
 
@@ -59,6 +73,7 @@ public class UIController {
         confirmacao.showAndWait().ifPresent(response -> {
             if (response.getText().equals("OK")) {
                 bibliotecaJogos.remover(jogo.getTitulo());
+                listaExibicao = coletarJogos();
                 exibirJogos();
 
                 Alert alerta = new Alert(AlertType.INFORMATION);
@@ -69,7 +84,6 @@ public class UIController {
             }
         });
     }
-
 
     private VBox criarCardJogo(Jogo jogo) {
         ImageView capa = new ImageView(new Image(jogo.getCapa(), 267, 400, false, false));
@@ -94,18 +108,34 @@ public class UIController {
         return card;
     }
 
+    
 
+    @FXML
+    private void ordenarPorTitulo() {
+        listaExibicao = coletarJogos();
+        BubbleSort.ordenarPorTitulo(listaExibicao);
+        exibirJogos();
+    }
+
+    @FXML
+    private void ordenarPorGenero() {
+        listaExibicao = coletarJogos();
+        InsertionSort.ordenarPorGenero(listaExibicao);
+        exibirJogos();
+    }
+
+    // NÃO ALTERADO
     @FXML
     private void abrirTelaCadastro() throws IOException {
         Stage stage = (Stage) btnAdicionar.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getResource("views/CadastroView.fxml"));
-        stage.setScene(new Scene(root,  900, 700));
+        stage.setScene(new Scene(root, 900, 700));
     }
 
     @FXML
     public void abrirTelaPrincipal() throws IOException {
         Stage stage = (Stage) btnAdicionar.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getResource("views/UIView.fxml"));
-        stage.setScene(new Scene(root,  900, 700));
+        stage.setScene(new Scene(root, 900, 700));
     }
 }
