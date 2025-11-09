@@ -11,7 +11,7 @@ public class BibliotecaJogos {
     private int capacidade;
     private static final double FATOR_CARGA_MAX = 0.75;
 
-    public BibliotecaJogos(int capacidadeInicial) {
+    private BibliotecaJogos(int capacidadeInicial) {
         this.capacidade = capacidadeInicial;
         this.tabela = new ArrayList<>(capacidadeInicial);
         for (int i = 0; i < capacidadeInicial; i++) {
