@@ -16,6 +16,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UIController {
@@ -29,15 +30,18 @@ public class UIController {
 
     private static BibliotecaJogos bibliotecaJogos = BibliotecaJogos.getInstancia();
 
+    
+    private List<Jogo> listaExibicao = new ArrayList<>();
+
     @FXML
     public void initialize() {
         carregarJogosExemplo();
+        listaExibicao = coletarJogos(); 
         exibirJogos();
 
-        // Adiciona listener para busca dinâmica
         campoBusca.textProperty().addListener((obs, antigo, novoValor) -> {
             if (novoValor == null || novoValor.trim().isEmpty()) {
-                exibirJogos(); // Se campo vazio, mostra todos
+                exibirJogos();
             } else {
                 exibirBusca(novoValor.trim());
             }
@@ -51,14 +55,20 @@ public class UIController {
         bibliotecaJogos.inserir(new Jogo("Resident Evil 4", getClass().getResource("/img/resident-evil-4.jpg").toExternalForm(), "Ação", 2005));
     }
 
+    private List<Jogo> coletarJogos() {
+        List<Jogo> lista = new ArrayList<>();
+        for (var l : bibliotecaJogos.getTabela()) {
+            lista.addAll(l);
+        }
+        return lista;
+    }
+
     private void exibirJogos() {
         flowJogos.getChildren().clear();
 
-        for (var lista : bibliotecaJogos.getTabela()) {
-            for (Jogo j : lista) {
-                VBox card = criarCardJogo(j);
-                flowJogos.getChildren().add(card);
-            }
+        for (Jogo j : listaExibicao) {
+            VBox card = criarCardJogo(j);
+            flowJogos.getChildren().add(card);
         }
     }
 
@@ -86,6 +96,7 @@ public class UIController {
         confirmacao.showAndWait().ifPresent(response -> {
             if (response.getText().equals("OK")) {
                 bibliotecaJogos.remover(jogo.getTitulo());
+                listaExibicao = coletarJogos();
                 exibirJogos();
 
                 Alert alerta = new Alert(AlertType.INFORMATION);
@@ -135,10 +146,18 @@ public class UIController {
     }
 
     @FXML
-    private void ordenarPorTitulo() {}
+    private void ordenarPorTitulo() {
+        listaExibicao = coletarJogos();
+        BubbleSort.ordenarPorTitulo(listaExibicao);
+        exibirJogos();
+    }
 
     @FXML
-    private void ordenarPorGenero() {}
+    private void ordenarPorGenero() {
+        listaExibicao = coletarJogos();
+        InsertionSort.ordenarPorGenero(listaExibicao);
+        exibirJogos();
+    }
 
     @FXML
     private void ordenarPorAno() {}
