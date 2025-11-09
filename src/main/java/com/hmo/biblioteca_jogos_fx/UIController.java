@@ -110,15 +110,21 @@ public class UIController {
 
     private VBox criarCardJogo(Jogo jogo) {
         ImageView capa = new ImageView(new Image(jogo.getCapa(), 267, 400, false, false));
+
         Label titulo = new Label(jogo.getTitulo());
         titulo.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
-        Label ano = new Label(String.valueOf(jogo.getAnoLancamento()));
+
+        Label genero = new Label("Gênero: " + jogo.getGenero());
+        genero.setStyle("-fx-font-size: 12px; -fx-text-fill: #555;");
+
+        Label ano = new Label("Ano: " + jogo.getAnoLancamento());
+        ano.setStyle("-fx-font-size: 12px; -fx-text-fill: #555;");
 
         Button btnRemover = new Button("Remover");
         btnRemover.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold;");
         btnRemover.setOnAction(e -> removerJogo(jogo));
 
-        VBox card = new VBox(5, capa, titulo, ano, btnRemover);
+        VBox card = new VBox(6, capa, titulo, genero, ano, btnRemover);
         card.setStyle("""
             -fx-padding: 10;
             -fx-alignment: center;
@@ -130,6 +136,7 @@ public class UIController {
 
         return card;
     }
+
 
     @FXML
     private void abrirTelaCadastro() throws IOException {
